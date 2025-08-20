@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloak-service
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/test-cloak
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    command: ["mongod", "--dbpath", "/data/db", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
